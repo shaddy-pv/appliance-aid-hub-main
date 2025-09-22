@@ -31,7 +31,7 @@ VITE_GEMINI_API_KEY=your_actual_api_key_here
 ## Built-in API Key
 
 The chatbot includes a built-in API key for immediate testing:
-- **Key**: `AIzaSyAC9bD8FTjXMFY6agLTek4aKXCLB9dpOV8`
+- **Key**: `[REDACTED - Use your own API key]`
 - **Usage**: Limited for testing purposes
 - **Production**: Replace with your own key
 

@@ -53,7 +53,7 @@ let chatHistory: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> 
  * @returns Promise<string> - The AI's response
  */
 export async function sendMessageToGemini(message: string): Promise<string> {
-  const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyAC9bD8FTjXMFY6agLTek4aKXCLB9dpOV8';
+  const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
   
   if (!API_KEY) {
     throw new Error('Gemini API key not configured. Please add VITE_GEMINI_API_KEY to your .env file.');

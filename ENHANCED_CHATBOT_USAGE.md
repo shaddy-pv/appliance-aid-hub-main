@@ -32,7 +32,7 @@ Visit any page on your app - you'll see a floating chat button in the bottom-rig
 
 ### 3. API Key Configuration
 
-Your API key `AIzaSyAC9bD8FTjXMFY6agLTek4aKXCLB9dpOV8` is already built into the code for immediate testing.
+Your API key is configured through environment variables for security.
 
 ## 📁 File Structure
 
@@ -52,7 +52,7 @@ src/
 
 ```typescript
 export async function sendMessageToGemini(message: string): Promise<string> {
-  const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyAC9bD8FTjXMFY6agLTek4aKXCLB9dpOV8';
+  const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
   
   // Comprehensive error handling
   // Rate limiting protection

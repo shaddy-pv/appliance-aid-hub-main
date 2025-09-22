@@ -113,9 +113,9 @@ const ChatbotTest: React.FC = () => {
                           API Key Configured
                         </Badge>
                       ) : (
-                        <Badge variant="secondary" className="w-fit">
+                        <Badge variant="destructive" className="w-fit">
                           <AlertTriangle className="h-3 w-3 mr-1" />
-                          Using Built-in Key
+                          API Key Required
                         </Badge>
                       )}
                     </CardHeader>
