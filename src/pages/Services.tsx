@@ -6,15 +6,53 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
 import { Star, Clock, Wrench } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { LoadingCard } from "@/components/LoadingSpinner";
 
 const ServicesPage = () => {
   const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { addService } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.listServices().then(setServices);
+    const loadServices = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await api.listServices();
+        setServices(data);
+      } catch (err) {
+        setError('Failed to load services. Please try again.');
+        console.error('Error loading services:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadServices();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="container py-10">
+        <h1 className="text-3xl font-bold mb-6">Services</h1>
+        <LoadingCard text="Loading services..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container py-10">
+        <h1 className="text-3xl font-bold mb-6">Services</h1>
+        <div className="text-center py-8">
+          <p className="text-destructive mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-10">

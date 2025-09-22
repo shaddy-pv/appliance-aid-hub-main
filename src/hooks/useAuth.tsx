@@ -15,7 +15,9 @@ interface AuthContextValue {
 const AuthContext = React.createContext<AuthContextValue | undefined>(undefined);
 
 async function request(path: string, init?: RequestInit) {
-  const res = await fetch(path, { credentials: "include", headers: { "Content-Type": "application/json" }, ...init });
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
+  const fullPath = path.startsWith('/') ? `${baseUrl}${path}` : path;
+  const res = await fetch(fullPath, { credentials: "include", headers: { "Content-Type": "application/json" }, ...init });
   return res;
 }
 
@@ -42,17 +44,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [refreshMe]);
 
   const login = React.useCallback(async (email: string, password: string) => {
-    const res = await request("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
-    if (!res.ok) throw new Error("Login failed");
-    const data = await res.json();
-    setUser(data);
+    try {
+      const res = await request("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || `Login failed with status ${res.status}`);
+      }
+      const data = await res.json();
+      setUser(data);
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
   }, []);
 
   const register = React.useCallback(async (fullName: string, email: string, password: string) => {
-    const res = await request("/api/auth/register", { method: "POST", body: JSON.stringify({ fullName, email, password }) });
-    if (!res.ok) throw new Error("Register failed");
-    const data = await res.json();
-    setUser(data);
+    try {
+      const res = await request("/api/auth/register", { method: "POST", body: JSON.stringify({ fullName, email, password }) });
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || `Registration failed with status ${res.status}`);
+      }
+      const data = await res.json();
+      setUser(data);
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    }
   }, []);
 
   const logout = React.useCallback(async () => {

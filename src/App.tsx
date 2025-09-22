@@ -12,11 +12,14 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Navbar from "@/components/Navbar";
 import { CartProvider } from "@/hooks/useCart";
-import { AuthProvider } from "@/hooks/useAuth";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ChatbotTest from "./pages/ChatbotTest";
+import FirebaseTest from "./pages/FirebaseTest";
+import Diagnostic from "./pages/Diagnostic";
 import SupportChatWidget from "@/components/SupportChatWidget";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { sendMessageToGemini, resetGeminiChat } from "@/lib/gemini-api";
 import { sendMessageToMockBot, resetMockBot } from "@/lib/mock-chatbot";
 
@@ -51,39 +54,43 @@ const App = () => {
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <BrowserRouter>
-          <AuthProvider>
-            <CartProvider>
-              <Toaster />
-              <Sonner />
-              <Navbar />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/book" element={<Book />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/chatbot-test" element={<ChatbotTest />} />
-              <Route path="*" element={<NotFound />} />
-              </Routes>
-              
-              {/* Support Chatbot */}
-              <SupportChatWidget 
-                onSendMessage={handleSendMessage}
-                onClearChat={handleClearChat}
-                placeholder="Ask about our repair services..."
-                welcomeMessage="Hi! I'm here to help with your appliance repair needs. What can I assist you with today?"
-              />
-            </CartProvider>
-          </AuthProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <BrowserRouter>
+            <AuthProvider>
+              <CartProvider>
+                <Toaster />
+                <Sonner />
+                <Navbar />
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/book" element={<Book />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/chatbot-test" element={<ChatbotTest />} />
+                  <Route path="/firebase-test" element={<FirebaseTest />} />
+                  <Route path="/diagnostic" element={<Diagnostic />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+                
+                {/* Support Chatbot */}
+                <SupportChatWidget 
+                  onSendMessage={handleSendMessage}
+                  onClearChat={handleClearChat}
+                  placeholder="Ask about our repair services..."
+                  welcomeMessage="Hi! I'm here to help with your appliance repair needs. What can I assist you with today?"
+                />
+              </CartProvider>
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 

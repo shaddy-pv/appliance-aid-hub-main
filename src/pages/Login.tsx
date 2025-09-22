@@ -2,29 +2,31 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useAuth, useNextAfterLogin } from "@/hooks/useAuth";
+import { useAuth, useNextAfterLogin } from "@/contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { Eye, EyeOff } from "lucide-react";
 
 const LoginPage = () => {
-  const { login } = useAuth();
+  const { login, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const next = useNextAfterLogin();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const loading = authLoading;
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);
     try {
       await login(email, password);
       navigate(next);
     } catch (err) {
-      setError("Invalid email or password");
-    } finally {
-      setLoading(false);
+      console.error('Login error:', err);
+      const errorMessage = err instanceof Error ? err.message : "Invalid email or password";
+      setError(errorMessage);
     }
   };
 
@@ -40,10 +42,28 @@ const LoginPage = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Password</label>
-              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <div className="relative">
+                <Input 
+                  type={showPassword ? "text" : "password"} 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  required 
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
+              </div>
             </div>
             {error && <p className="text-destructive text-sm">{error}</p>}
-            <Button type="submit" disabled={loading}>{loading ? "Signing in..." : "Sign in"}</Button>
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading ? <LoadingSpinner size="sm" text="Signing in..." /> : "Sign in"}
+            </Button>
           </form>
           <p className="text-sm text-muted-foreground mt-4">Don’t have an account? <Link className="underline" to="/register">Sign up</Link></p>
         </CardContent>

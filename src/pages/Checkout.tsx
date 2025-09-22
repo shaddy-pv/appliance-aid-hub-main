@@ -8,7 +8,7 @@ import { useCart } from "@/hooks/useCart";
 import { api } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { useAuth, useLoginRedirect } from "@/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
   fullName: z.string().min(2),
@@ -29,7 +29,7 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
-  const goLogin = useLoginRedirect();
+  const goLogin = (path: string) => navigate(`/login?next=${encodeURIComponent(path)}`);
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormValues>({
     resolver: zodResolver(formSchema),

@@ -6,14 +6,52 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
+import { LoadingCard } from "@/components/LoadingSpinner";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { addProduct } = useCart();
 
   useEffect(() => {
-    api.listProducts().then(setProducts);
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await api.listProducts();
+        setProducts(data);
+      } catch (err) {
+        setError('Failed to load products. Please try again.');
+        console.error('Error loading products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="container py-10">
+        <h1 className="text-3xl font-bold mb-6">Products</h1>
+        <LoadingCard text="Loading products..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container py-10">
+        <h1 className="text-3xl font-bold mb-6">Products</h1>
+        <div className="text-center py-8">
+          <p className="text-destructive mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-10">

@@ -1,5 +1,6 @@
 import React from "react";
-import { useAuth, useLoginRedirect } from "@/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { api } from "@/lib/api";
 import type { CartItem, Product, Service } from "@/lib/types";
 
@@ -19,7 +20,8 @@ const CartContext = React.createContext<CartContextValue | undefined>(undefined)
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = React.useState<CartItem[]>(() => api.readCart());
   const { user } = useAuth();
-  const goLogin = useLoginRedirect();
+  const navigate = useNavigate();
+  const goLogin = (path: string) => navigate(`/login?next=${encodeURIComponent(path)}`);
 
   const subtotal = React.useMemo(() => items.reduce((s, i) => s + i.price * i.quantity, 0), [items]);
 

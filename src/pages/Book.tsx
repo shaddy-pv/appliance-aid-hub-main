@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { useAuth, useLoginRedirect } from "@/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Enter your name"),
@@ -35,7 +35,7 @@ const BookPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
-  const goLogin = useLoginRedirect();
+  const goLogin = (path: string) => navigate(`/login?next=${encodeURIComponent(path)}`);
 
   useEffect(() => {
     api.listServices().then(setServices);

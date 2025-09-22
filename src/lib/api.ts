@@ -45,16 +45,53 @@ function seedProducts(): Product[] {
   return initial;
 }
 
-const API_BASE = ""; // Vite proxy handles /api to backend in dev
+const API_BASE = import.meta.env.VITE_API_BASE_URL || ""; // Use environment variable or fallback to proxy
+
+// Enhanced fetch with retry logic and better error handling
+async function apiRequest(url: string, options: RequestInit = {}): Promise<Response> {
+  const maxRetries = 3;
+  let lastError: Error | null = null;
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          ...options.headers,
+        },
+        ...options,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      return response;
+    } catch (error) {
+      lastError = error as Error;
+      console.warn(`API request attempt ${attempt} failed:`, error);
+      
+      if (attempt === maxRetries) {
+        throw lastError;
+      }
+      
+      // Wait before retry (exponential backoff)
+      await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+    }
+  }
+
+  throw lastError || new Error('API request failed');
+}
 
 export const api = {
   // Services
   async listServices(): Promise<Service[]> {
     try {
-      const res = await fetch(`${API_BASE}/api/services`, { credentials: "include" });
-      if (!res.ok) throw new Error(`Failed to list services: ${res.status}`);
+      const res = await apiRequest(`${API_BASE}/api/services`);
       return res.json();
-    } catch {
+    } catch (error) {
+      console.warn('Failed to fetch services from API, using local data:', error);
       // fallback to local seed if backend not available
       return seedServices();
     }
@@ -73,10 +110,10 @@ export const api = {
   // Products
   async listProducts(): Promise<Product[]> {
     try {
-      const res = await fetch(`${API_BASE}/api/products`, { credentials: "include" });
-      if (!res.ok) throw new Error(`Failed to list products: ${res.status}`);
+      const res = await apiRequest(`${API_BASE}/api/products`);
       return res.json();
-    } catch {
+    } catch (error) {
+      console.warn('Failed to fetch products from API, using local data:', error);
       return seedProducts();
     }
   },
@@ -160,17 +197,15 @@ export const api = {
     const items = this.readCart();
     const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
     try {
-      const res = await fetch(`${API_BASE}/api/orders`, {
+      const res = await apiRequest(`${API_BASE}/api/orders`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ items, subtotal, customer, paymentMethod }),
       });
-      if (!res.ok) throw new Error(`Failed to place order: ${res.status}`);
       const order = await res.json();
       this.clearCart();
       return order;
-    } catch {
+    } catch (error) {
+      console.warn('Failed to place order via API, using local storage:', error);
       const order: Order = {
         id: generateId("ord"),
         createdAt: new Date().toISOString(),
@@ -195,15 +230,13 @@ export const api = {
   // Bookings
   async createBooking(input: Omit<Booking, "id" | "createdAt" | "status"> & { status?: Booking["status"] }): Promise<Booking> {
     try {
-      const res = await fetch(`${API_BASE}/api/bookings`, {
+      const res = await apiRequest(`${API_BASE}/api/bookings`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify(input),
       });
-      if (!res.ok) throw new Error(`Failed to create booking: ${res.status}`);
       return res.json();
-    } catch {
+    } catch (error) {
+      console.warn('Failed to create booking via API, using local storage:', error);
       const booking: Booking = {
         id: generateId("bkg"),
         createdAt: new Date().toISOString(),
