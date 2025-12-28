@@ -1,372 +1,314 @@
-# 🏠 Appliance Aid Hub
+# 🛠️ Appliance Aid Hub
 
-A modern, full-stack web application for home appliance repair services and spare parts sales. Built with React, TypeScript, Node.js, and Prisma.
-
-## ✨ Features
-
-### 🛠️ **Core Services**
-- **AC Service & Repair** - Complete maintenance, gas refilling, and repair
-- **Washing Machine Repair** - Expert repair for all brands
-- **Microwave Repair** - Quick repair and maintenance services
-- **Electrical Repair** - Safe and reliable electrical services
-- **Refrigerator Service** - Comprehensive fridge maintenance
-- **Geyser Repair** - Water heater repair and maintenance
-
-### 🛒 **E-commerce Features**
-- **Spare Parts Store** - Genuine parts for all major brands
-- **Shopping Cart** - Add products and services to cart
-- **Order Management** - Track orders and booking status
-- **Payment Integration** - COD, Card, and UPI support
-
-### 🤖 **AI-Powered Support**
-- **Smart Chatbot** - Powered by Google Gemini AI
-- **Diagnostic Tool** - AI-assisted appliance troubleshooting
-- **24/7 Support** - Instant help and guidance
-
-### 🔐 **User Management**
-- **Authentication** - Secure login and registration
-- **User Profiles** - Manage personal information
-- **Order History** - Track all your orders and bookings
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- Git
-
-### 1. Clone the Repository
-```bash
-git clone <repository-url>
-cd appliance-aid-hub-main
-```
-
-### 2. Install Dependencies
-
-**Frontend:**
-```bash
-npm install
-```
-
-**Backend:**
-```bash
-cd server
-npm install
-```
-
-### 3. Environment Setup
-
-**Frontend (.env):**
-```bash
-VITE_API_BASE_URL=http://localhost:4000
-VITE_GEMINI_API_KEY=your-gemini-api-key
-NODE_ENV=development
-```
-
-**Backend (server/.env):**
-```bash
-DATABASE_URL="file:./dev.db"
-JWT_SECRET="your-jwt-secret"
-NODE_ENV=development
-PORT=4000
-```
-
-### 4. Database Setup
-```bash
-cd server
-npx prisma generate
-npx prisma migrate deploy
-npm run seed
-```
-
-### 5. Start Development Servers
-
-**Backend (Terminal 1):**
-```bash
-cd server
-npm run dev
-```
-
-**Frontend (Terminal 2):**
-```bash
-npm run dev
-```
-
-### 6. Access the Application
-- **Frontend:** http://localhost:8080
-- **Backend API:** http://localhost:4000
-- **Health Check:** http://localhost:4000/health
+A modern, full-stack appliance service booking platform built with React, Node.js, Express, and MongoDB.
 
 ## 🏗️ Project Structure
 
 ```
-appliance-aid-hub-main/
-├── src/                          # Frontend source code
-│   ├── components/               # React components
-│   │   ├── ui/                  # Reusable UI components
-│   │   └── ...                  # Feature components
-│   ├── pages/                   # Page components
-│   ├── hooks/                   # Custom React hooks
-│   ├── lib/                     # Utilities and API clients
-│   ├── contexts/                # React contexts
-│   └── assets/                  # Static assets
-├── server/                      # Backend source code
-│   ├── src/                     # Server source code
-│   │   ├── routes/              # API routes
-│   │   └── index.ts             # Main server file
-│   ├── prisma/                  # Database schema and migrations
-│   └── package.json             # Backend dependencies
-├── public/                      # Static public files
-├── dist/                        # Built frontend files
-└── production/                  # Production deployment files
+appliance-aid-hub/
+├── frontend/          # React + TypeScript + Vite
+│   ├── src/
+│   ├── public/
+│   └── package.json
+├── backend/           # Node.js + Express + MongoDB
+│   ├── src/
+│   └── package.json
+├── shared/            # Shared TypeScript types
+│   └── types/
+├── database/          # MongoDB schemas & documentation
+│   └── README.md
+├── .env.example       # Environment variables template
+└── README.md
 ```
 
-## 🛠️ Technology Stack
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- MongoDB Atlas account (or local MongoDB)
+- Git
+
+### 1. Clone the Repository
+
+```bash
+git clone <your-repo-url>
+cd appliance-aid-hub
+```
+
+### 2. Setup Environment Variables
+
+```bash
+# Copy example env files
+cp .env.example frontend/.env
+cp .env.example backend/.env
+```
+
+Edit the `.env` files with your actual values:
+
+**Backend `.env`:**
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+JWT_REFRESH_SECRET=your_refresh_secret_key
+RAZORPAY_KEY_ID=your_razorpay_key
+RAZORPAY_KEY_SECRET=your_razorpay_secret
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password
+```
+
+**Frontend `.env`:**
+```env
+VITE_API_URL=http://localhost:5000
+VITE_RAZORPAY_KEY_ID=your_razorpay_key
+```
+
+### 3. Install Dependencies
+
+```bash
+# Install backend dependencies
+cd backend
+npm install
+
+# Install frontend dependencies
+cd ../frontend
+npm install
+```
+
+### 4. Seed the Database (Optional)
+
+```bash
+cd backend
+npm run seed
+```
+
+### 5. Run the Application
+
+**Terminal 1 - Backend:**
+```bash
+cd backend
+npm run dev
+```
+
+**Terminal 2 - Frontend:**
+```bash
+cd frontend
+npm run dev
+```
+
+The application will be available at:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:5000
+
+## 📦 Tech Stack
 
 ### Frontend
-- **React 18** - Modern React with hooks
-- **TypeScript** - Type-safe JavaScript
-- **Vite** - Fast build tool and dev server
-- **Tailwind CSS** - Utility-first CSS framework
-- **Radix UI** - Accessible component primitives
-- **React Router** - Client-side routing
-- **TanStack Query** - Data fetching and caching
-- **React Hook Form** - Form handling
-- **Firebase** - Authentication and analytics
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool
+- **TailwindCSS** - Styling
+- **shadcn/ui** - UI components
+- **React Router** - Routing
+- **Axios** - HTTP client
+- **Zustand** - State management
 
 ### Backend
-- **Node.js** - JavaScript runtime
-- **Express.js** - Web framework
-- **TypeScript** - Type-safe JavaScript
-- **Prisma** - Database ORM
-- **SQLite/PostgreSQL** - Database
+- **Node.js** - Runtime
+- **Express** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM
 - **JWT** - Authentication
 - **Argon2** - Password hashing
-- **Zod** - Schema validation
+- **Razorpay** - Payment gateway
+- **Nodemailer** - Email service
 
-### AI & External Services
-- **Google Gemini AI** - Chatbot intelligence
-- **Firebase** - Authentication and analytics
+## 🔑 Key Features
 
-## 📦 Available Scripts
+- ✅ User authentication (register, login, JWT)
+- ✅ Service browsing and booking
+- ✅ Product catalog with cart
+- ✅ Razorpay payment integration
+- ✅ Admin dashboard
+- ✅ Order management
+- ✅ Email notifications
+- ✅ Responsive design
+- ✅ MongoDB database
 
-### Frontend
-```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run lint         # Run ESLint
-npm run test         # Run tests
-npm run test:ui      # Run tests with UI
-npm run test:coverage # Run tests with coverage
-npm run type-check   # Run TypeScript type checking
-```
+## 📝 Available Scripts
 
 ### Backend
+
 ```bash
-npm run dev          # Start development server
-npm run build        # Build TypeScript
-npm start            # Start production server
-npm run prisma:generate # Generate Prisma client
-npm run prisma:migrate # Run database migrations
-npm run seed         # Seed database with sample data
+npm run dev      # Start development server with hot reload
+npm run build    # Build for production
+npm start        # Start production server
+npm run seed     # Seed database with sample data
 ```
 
-## 🚀 Production Deployment
+### Frontend
 
-### Option 1: Automated Deployment
 ```bash
-chmod +x deploy.sh
-./deploy.sh
+npm run dev      # Start development server
+npm run build    # Build for production
+npm run preview  # Preview production build
+npm run lint     # Run ESLint
 ```
 
-### Option 2: Manual Deployment
+## 🗄️ Database
 
-1. **Build the application:**
-   ```bash
-   # Frontend
-   npm run build
-   
-   # Backend
-   cd server
-   npm run build
-   ```
+This project uses **MongoDB** with **Mongoose ODM**.
 
-2. **Set up production environment:**
-   - Configure environment variables
-   - Set up production database
-   - Configure reverse proxy (Nginx)
+### Models:
+- **User** - User accounts and authentication
+- **Service** - Available services
+- **Product** - Products for sale
+- **Order** - Customer orders
+- **Booking** - Service bookings
+- **RefreshToken** - JWT refresh tokens
 
-3. **Deploy using Docker:**
-   ```bash
-   cd production
-   docker-compose up -d
-   ```
+See `database/README.md` for detailed schema documentation.
 
-### Option 3: Cloud Deployment
+## 🔐 Authentication
 
-**Frontend (Vercel/Netlify):**
-- Connect your repository
-- Set build command: `npm run build`
-- Set output directory: `dist`
+- JWT-based authentication
+- Access tokens (15min expiry)
+- Refresh tokens (7 days expiry)
+- Secure password hashing with Argon2
+- Protected routes with middleware
 
-**Backend (Railway/Render):**
-- Connect your repository
-- Set build command: `cd server && npm run build`
-- Set start command: `cd server && npm start`
+## 💳 Payment Integration
 
-## 🔧 Configuration
+Razorpay payment gateway integration:
+- Secure payment processing
+- Order verification
+- Payment status tracking
 
-### Environment Variables
+## 📧 Email Service
 
-#### Frontend (.env)
-```bash
-VITE_API_BASE_URL=http://localhost:4000
-VITE_GEMINI_API_KEY=your-gemini-api-key
-NODE_ENV=development
+Nodemailer integration for:
+- Order confirmations
+- Booking confirmations
+- Password reset emails
+
+## 🛡️ Security Features
+
+- Password hashing with Argon2
+- JWT token authentication
+- HTTP-only cookies for refresh tokens
+- CORS configuration
+- Rate limiting
+- Helmet.js security headers
+- Input validation
+
+## 🌐 API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
+- `POST /api/auth/refresh` - Refresh access token
+- `POST /api/auth/logout` - Logout user
+
+### Services
+- `GET /api/services` - Get all services
+- `GET /api/services/:id` - Get service by ID
+
+### Products
+- `GET /api/products` - Get all products
+- `GET /api/products/:id` - Get product by ID
+
+### Orders
+- `POST /api/orders` - Create new order
+- `GET /api/orders` - Get user orders
+- `POST /api/orders/verify` - Verify payment
+
+### Bookings
+- `POST /api/bookings` - Create new booking
+- `GET /api/bookings` - Get user bookings
+
+### Admin (Protected)
+- `GET /api/admin/stats` - Dashboard statistics
+- `GET /api/admin/orders` - All orders
+- `GET /api/admin/bookings` - All bookings
+- `PATCH /api/admin/orders/:id` - Update order status
+- `PATCH /api/admin/bookings/:id` - Update booking status
+
+## 🎨 UI Components
+
+Built with shadcn/ui components:
+- Button, Card, Input, Label
+- Dialog, Sheet, Tabs
+- Toast notifications
+- Skeleton loaders
+- And more...
+
+## 📱 Responsive Design
+
+Fully responsive design that works on:
+- Desktop (1024px+)
+- Tablet (768px - 1023px)
+- Mobile (< 768px)
+
+## 🚧 Development
+
+### Code Structure
+
+**Frontend:**
+```
+frontend/src/
+├── components/     # Reusable UI components
+├── pages/          # Page components
+├── contexts/       # React contexts
+├── hooks/          # Custom hooks
+├── lib/            # Utilities and API
+└── assets/         # Images and static files
 ```
 
-#### Backend (server/.env)
-```bash
-DATABASE_URL="file:./dev.db"
-JWT_SECRET="your-super-secret-jwt-key"
-ACCESS_TOKEN_TTL_MINUTES=15
-REFRESH_TOKEN_TTL_DAYS=14
-PORT=4000
-NODE_ENV=development
-CORS_ORIGIN=http://localhost:8080,http://localhost:3000
+**Backend:**
 ```
-
-### Database Configuration
-
-The application supports both SQLite (development) and PostgreSQL (production):
-
-**SQLite (Default):**
-```bash
-DATABASE_URL="file:./dev.db"
+backend/src/
+├── models/         # Mongoose models
+├── routes/         # API routes
+├── services/       # Business logic
+├── config/         # Configuration
+└── index.ts        # Entry point
 ```
-
-**PostgreSQL:**
-```bash
-DATABASE_URL="postgresql://username:password@localhost:5432/appliance_aid_hub?schema=public"
-```
-
-## 🧪 Testing
-
-### Running Tests
-```bash
-# Run all tests
-npm run test
-
-# Run tests with UI
-npm run test:ui
-
-# Run tests with coverage
-npm run test:coverage
-
-# Run tests once
-npm run test:run
-```
-
-### Test Structure
-```
-src/
-├── test/
-│   └── setup.ts              # Test setup
-├── components/
-│   └── __tests__/            # Component tests
-├── pages/
-│   └── __tests__/            # Page tests
-└── lib/
-    └── __tests__/            # Utility tests
-```
-
-## 🔒 Security Features
-
-- **JWT Authentication** - Secure token-based auth
-- **Password Hashing** - Argon2id encryption
-- **CORS Protection** - Configured origins
-- **Rate Limiting** - API request limiting
-- **Input Validation** - Zod schema validation
-- **Security Headers** - Helmet.js protection
-- **Environment Variables** - Secure configuration
-
-## 📊 Performance Optimizations
-
-- **Code Splitting** - Lazy loading of components
-- **Bundle Optimization** - Manual chunk splitting
-- **Image Optimization** - Responsive images
-- **Caching** - React Query caching
-- **Tree Shaking** - Dead code elimination
-- **Minification** - Production build optimization
 
 ## 🐛 Troubleshooting
 
-### Common Issues
+### MongoDB Connection Issues
+- Verify your MongoDB URI in `.env`
+- Check network access in MongoDB Atlas
+- Ensure IP whitelist is configured
 
-1. **Port already in use:**
-   ```bash
-   # Kill process on port 4000
-   npx kill-port 4000
-   
-   # Kill process on port 8080
-   npx kill-port 8080
-   ```
+### Port Already in Use
+```bash
+# Kill process on port 5000 (backend)
+npx kill-port 5000
 
-2. **Database connection issues:**
-   ```bash
-   cd server
-   npx prisma generate
-   npx prisma migrate reset
-   npm run seed
-   ```
+# Kill process on port 5173 (frontend)
+npx kill-port 5173
+```
 
-3. **Build failures:**
-   ```bash
-   # Clear node_modules and reinstall
-   rm -rf node_modules package-lock.json
-   npm install
-   ```
-
-4. **TypeScript errors:**
-   ```bash
-   npm run type-check
-   ```
-
-### Getting Help
-
-- Check the [Issues](../../issues) page
-- Review the [Documentation](./docs/)
-- Contact the development team
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+### Module Not Found
+```bash
+# Clear node_modules and reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
-## 🙏 Acknowledgments
+## 🤝 Contributing
 
-- [React](https://reactjs.org/) - UI library
-- [Vite](https://vitejs.dev/) - Build tool
-- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
-- [Radix UI](https://www.radix-ui.com/) - Component primitives
-- [Prisma](https://www.prisma.io/) - Database ORM
-- [Google Gemini](https://ai.google.dev/) - AI capabilities
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📞 Support
 
-For support and questions:
-- **Email:** support@applianceaidhub.com
-- **Phone:** +91 98765 43210
-- **Website:** https://applianceaidhub.com
+For support, email your-email@example.com or open an issue in the repository.
 
 ---
 
-**Built with ❤️ for better home appliance care**
+**React, Node.js, and MongoDB**
